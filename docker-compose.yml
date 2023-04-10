@@ -1,0 +1,34 @@
+version: "3.1"
+
+services:
+  wordpress:
+    depends_on:
+      - wp_db
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: wp_db:3306
+      WORDPRESS_DB_USER: "wp_admin"
+      WORDPRESS_DB_PASSWORD: "wp_admin"
+      WORDPRESS_DB_NAME: "ecom"
+    volumes:
+      - wordpress:/var/www/html
+
+  wp_db:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: "ecom"
+      MYSQL_USER: "wp_admin"
+      MYSQL_PASSWORD: "wp_admin"
+      MYSQL_RANDOM_ROOT_PASSWORD: '12345678'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
